@@ -33,6 +33,15 @@
 """
 
 """
+-- 01/16/2021: License Acknowledgement and Bill of Alterations --
+
+This source has been modified by Scott Carlos Carrion in compliance with the above license:
+- Exclusive support for Python 3.x (source acquired from Texas Instruments written for Python 2.x, which was discontinued in 2020)
+- Implemented support for all functions and features therein of the original source
+
+"""
+
+"""
 TargetGUI provides a graphical front end to python-msp430-tools.  This does not modify anything
 in python-msp430-tools.  Because of this, we still create command line parser classes
 used by the command line even though they are not used by the GUI.  They are just
@@ -42,20 +51,20 @@ Reason for not modifying python-msp430-tools is to allow independent updates of 
 line version without requiring any changes.   
 
 """
-import tkMessageBox
-import tkFileDialog
+import tkinter.messagebox  # Changed from tkMessageBox in Python 2.x
+import tkinter.filedialog  # Changed from tkFileDialog in Python 2.x
 import sys
 import os
 import struct
 import logging
 import time
 import pkgutil
-import ttk
+import tkinter.ttk  # Changed from ttk in Python 2.x
 import traceback
 import logging
 import msp430.target
-from cStringIO import StringIO
-from Tkinter import *
+from io import StringIO  # Changed from cStringIO in Python 2.x
+from tkinter import *  # Changed from Tkinter in Python 2.x  TODO: MIGHT WANT TO CHANGE from <stuff> import *
 from msp430 import memory
 from logging import Handler
 from msp430.bsl5 import bsl5
@@ -122,7 +131,7 @@ class TargetGUI(object):
 
         self.myHandler=self.TextAreaHander()
         self.myHandler.setTG(self)
-	self.logger.addHandler(self.myHandler)
+        self.logger.addHandler(self.myHandler)
 
 
 
