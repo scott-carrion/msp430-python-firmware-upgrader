@@ -139,8 +139,9 @@ class TargetGUI(object):
    def doAbout(self):
         """
         Standard about box...
+        Updated with Python3 information
         """
-        tkMessageBox.showinfo('About Firmware Updater', 'Example firmware BSL application\n\nTexas Instruments, Copyright 2012')
+        tkinter.messagebox.showinfo('About Firmware Updater', 'Example firmware BSL application\n\nTexas Instruments, Copyright 2012\n\nPorted to Python 3 by Scott Carlos Carrion 01/2021\n\n v4.0.0')
 
 
    def doBlinkLED(self):
@@ -284,7 +285,7 @@ class TargetGUI(object):
        options['filetypes'] = [('text files', '.txt'),('all files', '.*')]
        options['parent'] = root
        options['title'] = 'Choose a file'
-       file = tkFileDialog.askopenfilename(**self.file_opt)
+       file = tkinter.filedialog.askopenfilename(**self.file_opt)  # Updated call to tkinter.filedialog here
        if file != '':
           self.doLoad(file)
           
@@ -357,7 +358,7 @@ class TargetGUI(object):
        file = Menu(top)
 
        # Create a progress bar and a textArea for the display
-       progressbar= ttk.Progressbar(orient=HORIZONTAL, length=200, maximum='100', mode='determinate')
+       progressbar= tkinter.ttk.Progressbar(orient=HORIZONTAL, length=200, maximum='100', mode='determinate')
        progressbar.pack(side="top")
        textField=Text(win,height=20,width=132,background='white', foreground='black', borderwidth='5',relief='sunken')
 
@@ -398,11 +399,11 @@ class TargetGUI(object):
         global root
         root = Tk() # root window
         if sys.platform == 'win32' or sys.platform == 'cygwin':
-           root.iconbitmap('./TI_Bug_Icon_Red.ico') 
+           root.iconbitmap('.\TI_Bug_Icon_Red.ico')   # TODO SCC: Note that I changed this path to follow windows path style (bug)
         if sys.platform == 'darwin':
-           root.iconbitmap('.\TI_Bug_Icon_Red.icns')
+           root.iconbitmap('./TI_Bug_Icon_Red.icns')  # TODO: SCC: Note that I did the same for Mac (unix-based)
      
-        root.title('MSP430 USB Firmware Upgrade Example 3.1')   # set window-mgr info
+        root.title('MSP430 USB Firmware Upgrade Example 4.0.0')   # set window-mgr info; TODO SCC: Semantic versioning now 4.0.0 (python3)
         self.makeGUI(root)                                     # associate a menu bar
         self.lookForDevice('Yes')
         root.mainloop()

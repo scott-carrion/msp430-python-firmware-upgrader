@@ -13,6 +13,10 @@ The bsl() method is responsible to implement the transport (e.g. serial
 port access, USB HID).
 """
 
+"""
+TODO SCC PUT LICENSING AND ALTERATION MESSAGE HERE LATER
+"""
+
 import struct
 
 # commands for the MSP430 target
@@ -229,8 +233,10 @@ if __name__ == '__main__':
         def bsl(self, cmd, message='', expect=None):
             txdata = struct.pack('<cBBB', DATA_FRAME, cmd, len(message), len(message)) + message
             txdata += struct.pack('<H', self.checksum(txdata) ^ 0xffff)   #append checksum
-            print repr(txdata), len(txdata)
-            print ''.join(['\\x%02x' % ord(x) for x in txdata])
+            print(repr(txdata), len(txdata))  # Python3 print function here
+            print(''.join(['\\x%02x' % ord(x) for x in txdata]))  # Same as above
+            #print repr(txdata), len(txdata)
+            #print ''.join(['\\x%02x' % ord(x) for x in txdata])
 
     dummy = DummyBSL()
     dummy.BSL_RX_PASSWORD("\xff"*32)

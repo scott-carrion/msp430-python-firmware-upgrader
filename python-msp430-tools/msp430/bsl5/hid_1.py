@@ -8,7 +8,11 @@
 """\
 Simple MSP430 BSL implementation using the USB HID interface.
 """
-import ttk
+
+"""
+TODO SCC PUT LICENSING AND ALTERATION MESSAGE HERE LATER!!
+"""
+import tkinter.ttk  # Changed from ttk in Python 2.x
 import sys
 import os
 from msp430.bsl5 import bsl5
@@ -20,7 +24,7 @@ import pkgutil
 from optparse import OptionGroup
 import msp430.target
 import msp430.memory
-from cStringIO import StringIO
+from io import StringIO  # Changed from cStringIO in Python 2.x
 
 
 class HIDBSL5Base(bsl5.BSL5):
