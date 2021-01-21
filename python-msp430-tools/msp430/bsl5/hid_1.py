@@ -63,7 +63,8 @@ class HIDBSL5Base(bsl5.BSL5):
         # first synchronize with slave
         self.logger.debug('Command 0x%02x (%d bytes)' % (cmd, 1+len(message)))
         #~ self.logger.debug('Command 0x%02x %s (%d bytes)' % (cmd, message.encode('hex'), 1+len(message)))
-        txdata = bytearray(struct.pack('<BBB', 0x3f, 1+len(message), cmd) + message)
+        # FIXME SCC: In Python2, struct.pack() returned a string. In Python3, it returns a bytes object
+        txdata = bytearray(struct.pack('<BBB', 0x3f, 1+len(message), cmd).decode("utf8") + message, encoding="utf8")
         txdata += b'\xac'*(64 - len(txdata)) # pad up to block size
         #~ self.logger.debug('Sending command: %r %d Bytes' % (txdata.encode('hex'), len(txdata)))
         # transmit command
@@ -78,17 +79,18 @@ class HIDBSL5Base(bsl5.BSL5):
                 self.logger.debug('report = %r' % report)
  
             else:
-                self.logger.debug('report = %r' % report.encode('hex'))
+                # self.logger.debug('report = %r' % report.encode('hex'))
+                self.logger.debug('report = %r' % report)
                 
             pi = report[0]
-            if pi == '\x3f':
+            if pi == '\x3f':  # XXX FIXME SCC This is a bad comparison because pi is of type bytes and the comparison is with a string literal (not the same!) 
                 length = ord(report[1])
                 data = report[2:2+length]
                 #~ if expect is not None and len(data) != expect:
                     #~ raise bsl5.BSL5Error('expected %d bytes, got %d bytes' % (expect, len(data)))
                 return data
             else:
-                if pi: raise bsl5.BSL5Error('received bad PI, expected 0x3f (got 0x%02x)' % (ord(pi),))
+                if pi: raise bsl5.BSL5Error('received bad PI, expected 0x3f (got 0x%02x)' % (pi,))
                 raise bsl5.BSL5Error('received bad PI, expected 0x3f (got empty response)')
 
 
