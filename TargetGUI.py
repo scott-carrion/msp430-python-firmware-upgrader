@@ -235,7 +235,13 @@ class TargetGUI(object):
         self.updateBar()
 
         # after erase, unlock device
+        # XXX FIXME SCC: BSL_RX_PASSWORD shall now use hex values instead of strings
+        # self.bsl5Target.BSL_RX_PASSWORD('\xff'*32)
+        # XXX SCC TEMP: TESTING SOME OF THE OTHER THINGS
+
         self.bsl5Target.BSL_RX_PASSWORD('\xff'*32)
+
+        raise Exception("Manual post-test interrupt (SCC)")
         self.updateBar()
 
         # download full BSL

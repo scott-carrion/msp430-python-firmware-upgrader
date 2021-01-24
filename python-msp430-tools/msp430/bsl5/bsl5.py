@@ -66,12 +66,14 @@ class BSL5(object):
     """
 
     def check_answer(self, data):
-        if data[0] == '\x3b':
-            if data[1] == '\0':
+        # XXX FIXME SCC: Function expects data to be of type string, but it is of type bytes (subscripts of type int)
+        print("[check_answer()] data is ", data, "and its type is ", type(data), "... data[0] value is ", data[0], "and its type is ", type(data[0]), "... data[1] value is ", data[1], "and its type is ", type(data[1]))
+        if data[0] == 0x3b:
+            if data[1] == 0x00:
                 return # SUCCESS!
-            raise BSL5Error(BSL5_ERROR_CODES.get(ord(data[1]), 'unknown error response 0x%02x' % ord(data[1])))
-        elif data[0] != '\x3a':
-            raise BSL5Error('unknown response 0x%02x' % ord(data[0]))
+            raise BSL5Error(BSL5_ERROR_CODES.get(data[1], 'unknown error response 0x%02x' % data[1]))
+        elif data[0] != 0x3a:
+            raise BSL5Error('unknown response 0x%02x' % data[0])
 
     def BSL_RX_DATA_BLOCK(self, address, data):
         packet = three_bytes(address) + data
@@ -100,6 +102,7 @@ class BSL5(object):
         self.bsl(BSL_LOAD_PC, three_bytes(address), receive_response=False)
 
     def BSL_RX_PASSWORD(self, password):
+        print("BSL_RX_PASSWORD() call with password parameter ", password, "; type of password is ", type(password))
         answer = self.bsl(BSL_RX_PASSWORD, password, expect=0)
         self.check_answer(answer)
 

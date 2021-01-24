@@ -61,30 +61,40 @@ class HIDBSL5Base(bsl5.BSL5):
         +------+-----+-----------+
         """
         # first synchronize with slave
+        print("[bsl()] Control entered bsl()...")
+
         self.logger.debug('Command 0x%02x (%d bytes)' % (cmd, 1+len(message)))
+        print('[bsl()] Command 0x%02x (%d bytes)' % (cmd, 1+len(message)))
         #~ self.logger.debug('Command 0x%02x %s (%d bytes)' % (cmd, message.encode('hex'), 1+len(message)))
         # FIXME SCC: In Python2, struct.pack() returned a string. In Python3, it returns a bytes object
         txdata = bytearray(struct.pack('<BBB', 0x3f, 1+len(message), cmd).decode("utf8") + message, encoding="utf8")
         txdata += b'\xac'*(64 - len(txdata)) # pad up to block size
+
+        print('Sending command: %r %d Bytes' % (txdata, len(txdata)))
         #~ self.logger.debug('Sending command: %r %d Bytes' % (txdata.encode('hex'), len(txdata)))
         # transmit command
         self.write_report(txdata)
         
         if receive_response:
             self.logger.debug('Reading answer...')
+            print('Reading answer...')
             report = self.read_report()
             
             if sys.platform == 'darwin':
                 
                 self.logger.debug('report = %r' % report)
+                print('report = %r' % report)
  
             else:
                 # self.logger.debug('report = %r' % report.encode('hex'))
                 self.logger.debug('report = %r' % report)
+                print('report = %r' % report)
                 
             pi = report[0]
-            if pi == '\x3f':  # XXX FIXME SCC This is a bad comparison because pi is of type bytes and the comparison is with a string literal (not the same!) 
-                length = ord(report[1])
+            # XXX FIXME SCC This is a bad comparison because pi is of type bytes (and subscripting it is of type int) and the comparison is with a string literal (not the same!) 
+            # Fixing this by comparing with integer 0x3f instead
+            if pi == 0x3f:
+                length = report[1]
                 data = report[2:2+length]
                 #~ if expect is not None and len(data) != expect:
                     #~ raise bsl5.BSL5Error('expected %d bytes, got %d bytes' % (expect, len(data)))

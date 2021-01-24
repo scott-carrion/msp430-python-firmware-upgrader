@@ -1,1 +1,3 @@
-The msp430, upon fresh plug, is located at /dev/hidraw5 on my machine. The tool does not have access to this path, and invoking sudo chmod a+rw /dev/hidraw5 is necessary in order to interface with it
+(1) The msp430, upon fresh plug, is located at /dev/hidraw5 on my machine. The tool does not have access to this path, and invoking sudo chmod a+rw /dev/hidraw5 is necessary in order to interface with it
+
+(2) Program cannot unlock the device in its current state. I am unsure of if it is correctly constructing and sending commands to the board
