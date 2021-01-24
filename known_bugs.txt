@@ -1,0 +1,1 @@
+The msp430, upon fresh plug, is located at /dev/hidraw5 on my machine. The tool does not have access to this path, and invoking sudo chmod a+rw /dev/hidraw5 is necessary in order to interface with it
